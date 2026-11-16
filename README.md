@@ -157,6 +157,40 @@ slots at multiples of 8, so position 5 is off-grid, and the GC gradient starts
 at 0.70 there, making an AU-rich motif doubly out of distribution. The model
 honours the constraint but surrounding composition shifts to accommodate it.
 
+```mermaid
+flowchart TD
+    A[make_data.py<br/>50k train / 10k held-out<br/>GC gradient + 3 motifs/seq] --> B[tokenizer.py<br/>ACGU + MASK → int64]
+
+    B --> C[metrics.py<br/>k-mer JS · positional L1<br/>GC KS · MFE · novelty]
+    B --> D[baselines.py<br/>uniform · positional · markov-3]
+    B --> E[train.py<br/>mask at rate t<br/>CE on masked positions only]
+
+    E --> F[model.py<br/>4-layer bidirectional encoder<br/>867k params → 4 logits]
+    F --> G[(model_v4.pt<br/>val 1.0486 nats)]
+
+    G --> H[diffusion.py sample<br/>fully masked → T steps<br/>random-order unmasking]
+
+    H --> I[benchmark.py<br/>sweep T = 10…250]
+    H --> J[conditional.py<br/>clamp motif, fill rest]
+    H --> K[check_motif.py<br/>check_positional.py]
+
+    C --> I
+    D --> I
+
+    I --> L[plots.py]
+    J --> L
+    L --> M[3 figures + README]
+
+    K -.->|below-chance fill accuracy| N{{model learned<br/>position only}}
+    N -.->|entropy decomposition| O{{corpus could not<br/>measure context}}
+    O -.->|rebuild corpus| A
+
+    style G fill:#55a868,color:#fff
+    style M fill:#4c72b0,color:#fff
+    style N fill:#dd8452,color:#fff
+    style O fill:#dd8452,color:#fff
+```
+
 ## Findings
 
 ### 1. Confidence-based decoding biases the output distribution
