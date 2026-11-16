@@ -12,7 +12,7 @@ from diffusion import sample
 from tokenizer import decode, load
 from metrics import positional_frequencies
 
-ckpt = torch.load("results/model.pt", map_location="cpu", weights_only=False)
+ckpt = torch.load("results/model_v4.pt", map_location="cpu", weights_only=False)
 a = ckpt["args"]
 m = SeqDiffusionTransformer(seq_len=a["seq_len"], d_model=a["d_model"],
                             n_layers=a["n_layers"], n_heads=a["n_heads"])

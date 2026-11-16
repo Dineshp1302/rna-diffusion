@@ -13,7 +13,7 @@ from model import SeqDiffusionTransformer
 from tokenizer import encode, load
 from make_data import MOTIFS
 
-ck = torch.load("results/model.pt", map_location="cpu", weights_only=False)
+ck = torch.load("results/model_v4.pt", map_location="cpu", weights_only=False)
 a = ck["args"]
 m = SeqDiffusionTransformer(seq_len=a["seq_len"], d_model=a["d_model"],
                             n_layers=a["n_layers"], n_heads=a["n_heads"])
