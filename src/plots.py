@@ -62,7 +62,7 @@ def fig_quality_speed(df, out):
         ax.plot(d.seqs_per_sec, d.kmer_js_k5, "-o", color=PALETTE["diffusion"],
                 lw=2, ms=7, zorder=4, label="diffusion (sweep over T)")
         for _, r in d.iterrows():
-            ax.annotate(f"T={r.T}", (r.seqs_per_sec, r.kmer_js_k5),
+            ax.annotate(f"T={int(r['T'])}", (r.seqs_per_sec, r.kmer_js_k5),
                         textcoords="offset points", xytext=(8, 6), fontsize=8)
 
     ax.set_xscale("log")
